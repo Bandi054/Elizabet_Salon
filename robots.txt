@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://heartfelt-blini-ffb753.netlify.app/sitemap.xml
+Sitemap: https://eliza-salon.netlify.app/sitemap.xml
