@@ -132,3 +132,6 @@ input:not([type=checkbox]),textarea{transition:border-color .2s ease,box-shadow 
 .navlinks a[aria-current=page]{color:#8e4a5a;text-decoration:underline;text-underline-offset:7px}
 @media(max-width:900px){.page-hero-grid,.editorial-grid,.service-layout,.contact-grid{gap:36px}.package-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:680px){.page-hero{padding:48px 0 64px}.page-hero-grid,.editorial-grid,.service-layout,.contact-grid{grid-template-columns:1fr}.page-hero img{height:340px;border-radius:140px 140px 16px 16px}.page-hero p,.page-lead p{font-size:16px}.editorial-grid img,.service-layout img{height:350px}.feature-list,.milestones,.package-grid{grid-template-columns:1fr}.package h3{min-height:0}.contact-grid .bookform{padding:24px}.legal-page{padding:64px 0}}
+.form-honeypot{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.form-privacy{font-size:13px;line-height:1.65}.form-privacy a{color:#6e3644;text-decoration:underline;text-underline-offset:3px}
+.success-page{max-width:760px;padding:80px 0 100px}.success-page h1{font-size:clamp(42px,5vw,68px)}.success-page p{margin:24px 0 32px;max-width:600px}
