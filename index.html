@@ -96,7 +96,7 @@ main h3,.process-steps h3,.benefit-grid h3{font-size:clamp(23px,2.1vw,28px)!impo
 .treatment-list summary,.faq summary{border-radius:8px;padding:12px 14px;margin-inline:-14px;transition:background-color .2s ease,color .2s ease}.treatment-list summary:hover,.faq summary:hover,.treatment-list summary:focus-visible,.faq summary:focus-visible{background:#f1e6df;color:#6e3644}.treatment-list summary:active,.faq summary:active{background:#ead9cd}
 .treatment-list summary:after,.faq summary:after{transition:transform .22s ease}.treatment-list summary:hover:after,.faq summary:hover:after{transform:scale(1.25)}
 input:not([type=checkbox]),textarea{transition:border-color .2s ease,box-shadow .2s ease}input:not([type=checkbox]):hover,textarea:hover{border-color:#8e4a5a}input:not([type=checkbox]):focus,textarea:focus{border-color:#8e4a5a;box-shadow:0 0 0 4px #8e4a5a22}
-@media(hover:hover) and (pointer:fine){.cream-puff{position:fixed;top:0;left:0;width:34px;height:42px;z-index:1000;pointer-events:none;opacity:0;transform-origin:3px 3px;transition:transform .14s ease,opacity .12s ease;filter:drop-shadow(1px 2px 2px #6e364455)}.cream-puff svg{display:block;width:100%;height:100%}.cream-brush,.cream-brush *{cursor:none!important}}
+@media(hover:hover) and (pointer:fine){.salon-cursor{position:fixed;top:0;left:0;width:26px;height:32px;z-index:1000;pointer-events:none;opacity:0;transition:opacity .12s ease;filter:drop-shadow(1px 2px 2px #2e262655)}.salon-cursor svg{display:block;width:100%;height:100%}.salon-cursor .light-arrow{opacity:0}.salon-cursor.on-dark .dark-arrow{opacity:0}.salon-cursor.on-dark .light-arrow{opacity:1}.salon-cursor-enabled,.salon-cursor-enabled *{cursor:none!important}}
 @media(prefers-reduced-motion:reduce){.btn,.textlink,.navlinks a:not(.btn),.footer a,.treatment-list summary,.faq summary,.treatment-list summary:after,.faq summary:after,input:not([type=checkbox]),textarea{transition:none!important}.btn:hover,.btn:focus-visible,.btn:active,.textlink:hover,.textlink:focus-visible,.textlink:active,.journey-nav .journey-card:active{transform:none}}
 </style>
 </head>
@@ -121,19 +121,16 @@ const menuButton=document.querySelector('.menu'),menu=document.querySelector('.n
 document.querySelectorAll('[data-treatment]').forEach(a=>a.addEventListener('click',()=>{document.getElementById('message').value=a.dataset.treatment}));
 document.querySelectorAll('.treatment-list, .faq').forEach(group=>{group.querySelectorAll('details').forEach(item=>item.addEventListener('toggle',()=>{if(item.open)group.querySelectorAll('details').forEach(other=>{if(other!==item)other.open=false})}))});document.querySelectorAll('form[data-demo]').forEach(form=>form.addEventListener('submit',event=>{event.preventDefault();form.querySelector('.form-message').textContent=form.dataset.demo==='booking'?'A bemutató sikeresen működik. Nem küldtünk el adatot, és nem foglaltunk időpontot.':'A bemutató sikeresen működik. Nem történt feliratkozás; a Kisokos még nem tölthető le.';form.reset()}));
 if('IntersectionObserver'in window&&!matchMedia('(prefers-reduced-motion: reduce)').matches){document.documentElement.classList.add('js-motion');const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('seen');observer.unobserve(entry.target)}}),{threshold:.08});document.querySelectorAll('.reveal').forEach(el=>observer.observe(el))}
-// A pamacs hegye a kattintási pont; mozgáskor legfeljebb 15 fokot billen.
+// Klasszikus nyíl: a hegye a kattintási pont, színe a mögötte lévő felülethez igazodik.
 if(matchMedia('(hover:hover) and (pointer:fine)').matches&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
-  document.body.classList.add('cream-brush');
-  const puff=document.createElement('div');puff.className='cream-puff';puff.setAttribute('aria-hidden','true');
-  puff.innerHTML='<svg viewBox="0 0 34 42" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="puff-color" x1=".15" y1=".05" x2=".85" y2=".9"><stop stop-color="#d9a9ba"/><stop offset=".55" stop-color="#aa657e"/><stop offset="1" stop-color="#743d53"/></linearGradient><radialGradient id="puff-light" cx=".32" cy=".34" r=".64"><stop stop-color="#f7dce5" stop-opacity=".8"/><stop offset="1" stop-color="#f7dce5" stop-opacity="0"/></radialGradient></defs><path d="M3 3C17 5 30 14 32 27c2 8-3 13-10 14C11 42 4 34 4 23 4 15 3 8 3 3Z" fill="url(#puff-color)" stroke="#713d51" stroke-width=".8"/><path d="M3 3C17 5 30 14 32 27c2 8-3 13-10 14C11 42 4 34 4 23 4 15 3 8 3 3Z" fill="url(#puff-light)"/><path d="M10 34c8-6 15-8 22-7 1 8-4 13-10 14-5 0-9-2-12-7Z" fill="#e4b7c8" opacity=".4"/></svg>';
-  document.body.append(puff);
-  let lastX=null;
-  addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;const shift=lastX===null?0:Math.max(-15,Math.min(15,(e.clientX-lastX)*1.5)),tilt=-15+shift;
-    puff.style.opacity='1';puff.style.left=`${e.clientX-3}px`;puff.style.top=`${e.clientY-3}px`;puff.style.transform=`rotate(${tilt}deg)`;
-    lastX=e.clientX;
-  },{passive:true});
-  document.addEventListener('pointerleave',()=>{lastX=null;puff.style.opacity='0'});
-  addEventListener('blur',()=>{lastX=null;puff.style.opacity='0'});
+  document.body.classList.add('salon-cursor-enabled');
+  const cursor=document.createElement('div');cursor.className='salon-cursor';cursor.setAttribute('aria-hidden','true');
+  cursor.innerHTML='<svg viewBox="0 0 26 32" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="arrow-dark" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#6e3644"/><stop offset="1" stop-color="#a35a6d"/></linearGradient><linearGradient id="arrow-light" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fffaf5"/><stop offset="1" stop-color="#e8cbbb"/></linearGradient></defs><path class="dark-arrow" d="M1 1v25l6.7-6.1 5.1 10.7 4.5-2.2-5.2-10.5H22Z" fill="url(#arrow-dark)" stroke="#faf6f2" stroke-width="1.5" stroke-linejoin="round"/><path class="light-arrow" d="M1 1v25l6.7-6.1 5.1 10.7 4.5-2.2-5.2-10.5H22Z" fill="url(#arrow-light)" stroke="#6e3644" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+  document.body.append(cursor);
+  function darkSurface(element){for(let node=element;node;node=node.parentElement){const match=getComputedStyle(node).backgroundColor.match(/rgba?\(([^)]+)\)/);if(!match)continue;const values=match[1].split(/[ ,/]+/).map(Number);if(values.length>3&&values[3]<.1)continue;const [r,g,b]=values.map(value=>{const channel=value/255;return channel<=.04045?channel/12.92:((channel+.055)/1.055)**2.4});return .2126*r+.7152*g+.0722*b<.42}return false}
+  addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;cursor.style.opacity='1';cursor.style.left=`${e.clientX-1}px`;cursor.style.top=`${e.clientY-1}px`;cursor.classList.toggle('on-dark',darkSurface(document.elementFromPoint(e.clientX,e.clientY)))},{passive:true});
+  document.addEventListener('pointerleave',()=>{cursor.style.opacity='0'});
+  addEventListener('blur',()=>{cursor.style.opacity='0'});
 }
 </script>
 </body>
